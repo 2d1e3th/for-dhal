@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Dharel</title>
+    <style>
+        :root {
+            --poke-red: #ee1515;
+            --poke-black: #222222;
+            --poke-white: #f0f0f0;
+            --poke-blue: #3b4cca;
+            --poke-yellow: #ffde00;
+            --dark-bg: #111111;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--dark-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden; /* Prevents horizontal scroll on small screens */
+        }
+
+
+        /* Perfectly Centered Wrapper */
+        .envelope-wrapper {
+            cursor: pointer;
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* ENVELOPE SIZING: Responsive for different screens */
+        .envelope {
+            position: relative;
+            width: 280px; /* Default Desktop/Laptop width */
+            height: 200px;
+            background: var(--poke-white);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            border: 5px solid var(--poke-black);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            overflow: hidden;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 0; height: 0;
+            border-top: 115px solid var(--poke-red);
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            z-index: 5;
+        }
+
+        .envelope::after {
+            content: "";
+            position: absolute;
+            top: 50%; left: 0;
+            width: 100%;
+            height: 14px;
+            background: var(--poke-black);
+            transform: translateY(-50%);
+            z-index: 4;
+        }
+
+        .center-button {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 50px; height: 50px;
+            background: white;
+            border: 5px solid var(--poke-black);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
+        }
+
+        /* CONTENT CONTAINER: Responsive Width */
+        .content {
+            display: none;
+            text-align: center;
+            color: white;
+            width: 90%; /* Responsive width for mobile */
+            max-width: 500px; /* Max width for laptop */
+            padding: 25px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        h1 { 
+            color: var(--poke-yellow); 
+            text-shadow: 2px 2px var(--poke-blue); 
+            font-size: clamp(1.8rem, 5vw, 2.6rem); /* Text scales with screen size */
+            margin-bottom: 10px;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .poke-btn {
+            background: var(--poke-white);
+            border: 3px solid var(--poke-black);
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--poke-black);
+            transition: 0.3s;
+        }
+
+        .poke-btn:hover {
+            background: var(--poke-red);
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.98);
+            color: #111;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+            border-top: 8px solid var(--poke-red);
+            text-align: left;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* MEDIA QUERIES for Tablet and Mobile */
+        @media (max-width: 600px) {
+            .envelope {
+                width: 220px;
+                height: 160px;
+            }
+            .envelope::before {
+                border-top: 90px solid var(--poke-red);
+                border-left: 110px solid transparent;
+                border-right: 110px solid transparent;
+            }
+            .center-button {
+                width: 40px;
+                height: 40px;
+            }
+            .envelope-wrapper div:first-of-type {
+                font-size: 1.1em !important;
+            }
+        }
+
+        .close-btn {
+            display: block;
+            margin-top: 15px;
+            background: var(--poke-black);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .opened .envelope-wrapper { display: none; }
+        .opened .bg-overlay { opacity: 1; }
+        .opened .content { display: block; animation: zoomIn 0.8s forwards; }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-overlay"></div>
+
+    <div class="envelope-wrapper" onclick="openEnvelope()">
+        <div class="envelope">
+            <div class="center-button"></div>
+        </div>
+        <div style="color: white; font-weight: bold; font-size: 1.3em; text-shadow: 2px 2px #000;">
+            DHAREL, A WILD GIFT APPEARED!<br>
+            <span style="font-weight: normal; font-size: 0.8em; opacity: 0.8;">(Click the Poké Ball to open)</span>
+        </div>
+    </div>
+
+    <div class="content" id="mainContent">
+        <h1>Happy Birthday, Dharel!</h1>
+        <div class="btn-container" id="menuButtons">
+            <button class="poke-btn" onclick="showInfo('message')">✉️ A Personal Message</button>
+            <button class="poke-btn" onclick="showInfo('songs')">🎵 Recommended Songs</button>
+            <button class="poke-btn" onclick="showInfo('reasons')">❤️ Why I'm Glad You're Here</button>
+            <button class="poke-btn" onclick="showInfo('memes')"> 😆 Memes to Distract You</button>
+        </div>
+        <div id="displayBox" class="info-box"></div>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            document.body.classList.add('opened');
+        }
+
+        function showInfo(type) {
+            const box = document.getElementById('displayBox');
+            const menu = document.getElementById('menuButtons');
+            menu.style.display = 'none'; 
+            box.style.display = 'block';
+
+            let content = "";
+            if(type === 'message') {
+                content = "<strong>To Dharel,</strong><br><br>I wanted to take a moment today, on your birthday, to send you something more than just a quick greeting. I know that right now, the world feels incredibly heavy, dark, and maybe even exhausting to be a part of. I know there are days when it feels like nobody understands the weight you’re carrying, and it might even feel like you’d rather not be carrying it at all.  <br> <br>" +
+                "I’m not here to tell you to 'cheer up' or to pretend that everything is fine, because I know it isn't. I know your soul is tired. But I want you to know that even when you feel like you hate everyone and everything, I am still here. I’m not asking you to be 'happy' for me or to put on a mask today. You don’t have to perform or pretend. I just want you to know that you are seen, exactly as you are—with all the sadness and the anger and the exhaustion. <br><br> " +
+                "I am so incredibly glad that I got to know you. I’m super thankful for the times you helped me, and I cherish the bond we’ve built. Whether it was just talking or playing Roblox together, those moments mean the world to me. I’m so glad we met, and it doesn't matter to me if you don't recognize me in person or that I only exist to you on the internet; our connection is real to me, and you have made a genuine impact on my life.<br><br>" + 
+                "You are a vital part of my world. Even if you don't feel like a 'hero' right now, you are still the person I want in my 'party.' Like a long Pokémon journey, there are levels that feel impossible to beat and caves that feel too dark to navigate, but I don't want to reach the next stage without you. I’m already looking forward to the day you feel up to it so we can play together again. <br><br>" +
+                "Please just take today one minute at a time. If the only thing you do today is exist, that is enough for me. You are worth more than you can see right now, and I’m going to keep holding onto that truth for you until you’re strong enough to hold it yourself.<br><br>" +
+                "Happy Birthday, Dharel. I’m really, really glad you were born.<br><br> ";
+            } else if(type === 'songs') {
+                content = "<strong>Songs you might like:</strong><br><br>" +
+              "• <b>Littleroot Town Theme (Pokémon):</b> A quiet, nostalgic melody for when you need the world to stay still for a moment.<br>" +
+              "• <b>Fix You by Coldplay:</b> A reminder that it is okay to feel broken, and that I'm here to sit with you in the dark.<br>" +
+              "• <b>Roblox Crossroads Theme (Ambient):</b> A peaceful, grounding sound that reminds me of our bond and playing together.<br>" +
+              "• <b>Heavy by Linkin Park:</b> A song that understands how exhausting it is when your own mind feels like a weight.<br>" +
+              "• <b>Safe and Sound by Taylor Swift:</b> A gentle lullaby to remind you that you are allowed to just rest and be safe right now.<br>" +
+              "• <b>Liability by Lorde:</b> For the times you feel like you are 'too much'—just know you are never a burden to me.<br>" +
+              "• <b>Everything Stays by Olivia Olson:</b> A soft reminder that even when things change or feel lost, they still have a place in our hearts.<br>" +
+              "• <b>Gilded Lily by Cults:</b> A song for the tired soul, acknowledging the wait for things to feel right again.<br>" +
+              "• <b>Fine on My Own by Trapdoor Social:</b> A familiar Roblox vibe for those moments when you feel isolated from everything else.<br>" +
+              "• <b>Eterna Forest Theme (Pokémon):</b> A quiet and safe atmosphere to help you escape into a calmer place.<br>" +
+              "• <b>How to Save a Life by The Fray:</b> A classic validation of the struggle when things feel like they are slipping away.<br>" +
+              "• <b>'I Know It's Over' by The Smiths:</b> One of the most raw, underrated expressions of feeling alone and exhausted.<br>" +
+              "• <b>'Class of 2013' by Mitski:</b> An incredibly heavy song about just wanting to go home and be taken care of when the world is too much.<br>" +
+              "• <b>'In the Shadow of the Valley' by Lost Weekend:</b> A nostalgic, lonely vibe that many gamers find comforting during late nights.<br>" +
+              "• <b>'Everything Is Going to Be OK' by Low Roar:</b> An underrated gem that acknowledges sadness while feeling like a slow, deep breath.<br>" +
+              "• <b>'Aglow' by Karima Walker:</b> A very quiet, ambient track for when you can't handle loud noises or fast music.<br>" +
+              "• <b>'Comfortably Numb' by Pink Floyd:</b> While famous, it is the ultimate underrated anthem for feeling detached from the world.<br>" +
+              "• <b>Chamber of Reflection by Mac DeMarco:</b> Sounds like how it feels to be alone with your thoughts.<br>" +
+              "• <b>Fourth of July by Sufjan Stevens:</b> A deeply sad, quiet song. It’s okay to sit with this feeling.<br>" +
+              "• <b>The Night We Met by Lord Huron:</b> For the heavy feeling of wishing you could go back in time.<br>" +
+              "• <b>Space Song by Beach House:</b> Feels like floating in a dark galaxy—sad but peaceful.<br>" +
+              "<br><br> i don't know but i just search these songs and add/search some info hahhahahahahhahaha idk if you like those songs (above), but i know maybe some of those songs, you might already knew it xdxdxd <br><br> ";
+            
+            } else if(type === 'reasons') {
+                content = "<strong>Why I'm so glad you're in my party:</strong><br><br>" +
+              "• <b>Trust & Lore:</b> I’m so happy and honored that you’re comfortable enough to share your 'lore' and family stories with me. It means so much that you trust me with that part of your life.<br>" +
+              "• <b>You Let Me Yap:</b> I'm so thankful that you let me yap and yap even when I feel like I'm being too much. It means a lot that you listen.<br>" +
+              "• <b>Our Unique Bond:</b> Even if we aren't that close in person, you still make space for me. That kind of kindness is rare and I really value it.<br>" +
+              "• <b>You Always Reply:</b> No matter how much I talk, you still reply. You never make me feel like a burden, and I want you to know you aren't one to me either.<br>" +
+              "• <b>You Truly Get Me:</b> You understand me in ways most people don't. I feel like I can just be myself when we talk or play Roblox.<br>" +
+              "• <b>Your Brave Realness:</b> You are honest about your pain instead of pretending. That honesty is a strength, and I'm glad to be in your corner.<br>" +
+              "• <b>An Irreplaceable Friend:</b> The 'internet only' part doesn't change how real this is. I'm so glad we met and that you're part of my world. <br><br> " +
+              "<br><br> HAHAHAHAHAHAHAHHA bro, i was really shocked when you think of that series i shared, they suicide together. But let's do the other ways HAHAAHAHAHAH unique ahahahaxdxdxdxdxdx lols sndjsancjnsjcnsadncsa goshhhh that's kinda crazyyy broooo. DO NOT DIE YET. XDXDXDXD ";
+            } else if(type === 'memes') {
+                content = "<strong>A Small Distraction:</strong><br><br> " +
+               "<br> HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAA AKO ANG MEMES, OUR WHOLE LIFE, I GUESS??????? WBAHAHAJHJSAHDSAHDUAHSDJHSDHUD HAPPEH BIRTHDAYYYYY <br> " +
+               "<br> HAHAHAHAHAA MAY MEMES MAN DAPAT NI NGA VIDS OR PICS, BUT IDK HOW NA KAY DI SIYA MO WORK WHHAHAHAHHAHA SA MESSENGER NA LANG, MARAMI PAKO MA SEND NGA MEMES XDXDXD <br>" +
+               "<br> AND ALSO, MAY BG NI NGA POKEMON PERO AYAW NIYA TALAGA, NAHUTDAN NAKO PASENSYA HWHAHAHAHAHA XOREHHH. BASIC LANG MAN ITO BUT I ALSO ASKED A HELPED FROM GEMINI TO MAKE IT EASIER WHAHAHAHAHHAA ENJOY UR DAY. AKO ANG LAST MAG GREET XDXDXDX <br>";
+            }
+
+            box.innerHTML = content + `<button class="close-btn" onclick="goBack()">Go Back to Options</button>`;
+            box.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function goBack() {
+            document.getElementById('displayBox').style.display = 'none';
+            document.getElementById('menuButtons').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
